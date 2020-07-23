@@ -74,7 +74,50 @@ docker pull <registry public hostname>/ubuntu
 ```
 
 ## Docker Storage
-### Docker volumes
+Storage Drivers aka graph drivers. overlay2, aufs, devicemapper  
+Storage models - persistent data can be managed using several storage models.
+* Filesystem storage
+  * Data is stored in the form of a file system.
+  * Used by overlay2 and aufs.
+  * Efficient use of memory.
+  * Inefficient with write-heavy workloads.
+* Block storage
+  * Stores data in blocks
+  * Used by devicemapper
+  * efficient with write-heavy workloads
+* Object storage
+  * Stores data in an external object-based store
+  * Application must be designed to use object-based storage
+  * Flexiable and scalable
+
+### Locate Docker Storage
+Run a basic container:
+```bash
+docker run --name storage_nginx nginx
+```
+Use docker inspect to find the location of the container's data on the host:
+```bash
+docker container inspect storage_nginx
+ls /var/lib/docker/overlay2/<STORAGE_HASH>/
+```
+Use docker inspect to find the location of an image's data:
+```bash
+docker image inspect nginx
+```
+
+### Docker Mounts & Volumes
+There are two ways of using external storage for Docker containers:
+* Bind mounts
+* Volumes
+Bind mounts
+* mount point that is locate on the system
+* not considered portable, relies on the host file system and directory structure
+Volumes
+* Docker managed storage, which is on the host system
+* considered to be portable
+* can be utilitzed by multiple containers
+* more flexiable than bind mounts
+
 ### Clustered storage
 
 ## Docker Networking
